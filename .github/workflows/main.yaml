@@ -1,14 +1,32 @@
-name: Python Quality Check
+name: Python Checks
 
 on:
   push:
-    branches: [ "master", "main" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "master", "main" ]
+    branches: [ "main" ]
 
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
+
+    # Поднимаем вспомогательные сервисы (базу данных)
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: admin
+          POSTGRES_DB: parking_db
+        # Пробрасываем порты из контейнера наружу
+        ports:
+          - 5432:5432
+        # Ждем, пока база полностью прогрузится и будет готова принимать подключения
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
     - name: Checkout code
@@ -25,9 +43,13 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run Pytest
+      # Передаем параметры подключения через переменные окружения, если код их поддерживает
+      env:
+        DATABASE_URL: postgresql://admin:admin@localhost:5432/parking_db
       run: pytest test/
 
     - name: Run Linters
+      # Линтеры запускаем в конце — если тесты упали, до них дело не дойдет (экономим время)
       run: |
         flake8 main/
         mypy main/
