@@ -134,12 +134,8 @@ def create_app():
         db.session.commit()
 
         return (
-            jsonify(
-                {
-                    "message": f"""Car {new_client_parking.client.car_number} is
-              parked in {new_client_parking.parking.address}"""
-                }
-            ),
+            jsonify({"message": f"""Car {new_client_parking.client.car_number} is
+              parked in {new_client_parking.parking.address}"""}),
             201,
         )
 
@@ -178,12 +174,8 @@ def create_app():
         db.session.commit()
 
         return (
-            jsonify(
-                {
-                    "message": f"""Car {log_entry.client.car_number} is
-              leaving parking in {log_entry.parking.address}"""
-                }
-            ),
+            jsonify({"message": f"""Car {log_entry.client.car_number} is
+              leaving parking in {log_entry.parking.address}"""}),
             201,
         )
 
