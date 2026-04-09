@@ -15,9 +15,9 @@ jobs:
       postgres:
         image: postgres:15
         env:
-          POSTGRES_USER: admin
-          POSTGRES_PASSWORD: admin
-          POSTGRES_DB: parking_db
+          POSTGRES_USER: "admin"
+          POSTGRES_PASSWORD: "admin"
+          POSTGRES_DB: "parking_db"
         # Пробрасываем порты из контейнера наружу
         ports:
           - 5432:5432
@@ -45,7 +45,7 @@ jobs:
     - name: Run Pytest
       # Передаем параметры подключения через переменные окружения, если код их поддерживает
       env:
-        DATABASE_URL: postgresql://admin:admin@localhost:5432/parking_db
+        DATABASE_URL: "postgresql://admin:admin@localhost:5432/parking_db"
       run: pytest test/
 
     - name: Run Linters
