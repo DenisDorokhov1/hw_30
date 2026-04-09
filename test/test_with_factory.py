@@ -1,11 +1,14 @@
-from .factories import ClientFactory, ParkingFactory
 from main.models import Client, Parking
+
+from .factories import ClientFactory, ParkingFactory
+
 
 def test_factory_client(app, db):
     new_client = ClientFactory()
     db.session.commit()
     assert len(db.session.query(Client).all()) == 2
     assert isinstance(new_client.car_number, str)
+
 
 def test_factory_parkig(app, db):
     new_parking = ParkingFactory()
